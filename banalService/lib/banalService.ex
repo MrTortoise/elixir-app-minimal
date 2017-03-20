@@ -1,18 +1,10 @@
 defmodule BanalService do
   @moduledoc """
-  Documentation for BanalService.
+  BanalService is basically a hello world service.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> BanalService.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def start(_type, _args) do
+    BanalService.Supervisor.start_link
+    
   end
 end
