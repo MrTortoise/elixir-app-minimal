@@ -7,7 +7,6 @@ defmodule KV.RegistryTest do
   end
 
 
-
   test "spawns buckets", %{registry: registry} do
     assert KV.Registry.lookup(registry, "shopping") == :error
 
@@ -25,19 +24,17 @@ defmodule KV.RegistryTest do
     assert KV.Registry.lookup(registry, "shopping") == :error
   end
 
-    test "removes bucket on crash", %{registry: registry} do
-      KV.Registry.create(registry, "shopping")
-      {:ok, bucket} = KV.Registry.lookup(registry, "shopping")
+  test "removes bucket on crash", %{registry: registry} do
+    KV.Registry.create(registry, "shopping")
+    {:ok, bucket} = KV.Registry.lookup(registry, "shopping")
 
-      # Stop the bucket with non-normal reason
-      ref = Process.monitor(bucket)
-      Process.exit(bucket, :shutdown)
+    # Stop the bucket with non-normal reason
+    ref = Process.monitor(bucket)
+    Process.exit(bucket, :shutdown)
 
-      # Wait until the bucket is dead
-      assert_receive {:DOWN, ^ref, _, _, _}
+    # Wait until the bucket is dead
+    assert_receive {:DOWN, ^ref, _, _, _}
 
-      assert KV.Registry.lookup(registry, "shopping") == :error
-    end
-
-
+    assert KV.Registry.lookup(registry, "shopping") == :error
+  end
 end
